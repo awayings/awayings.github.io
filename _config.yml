@@ -1,0 +1,7 @@
+markdown: rdiscount
+permalink: /:year/:month/:title/
+url: http://lazybios.github.com
+author: lazybios
+pygments: true
+
+IMG_PATH: http://freshstu.qiniudn.com
