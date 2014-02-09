@@ -1,7 +1,7 @@
 markdown: rdiscount
 permalink: /:year/:month/:title/
-url: http://lazybios.github.com
-author: lazybios
+url: http://awayings.github.io
+author: Jason Zhang
 pygments: true
 
 IMG_PATH: http://freshstu.qiniudn.com
