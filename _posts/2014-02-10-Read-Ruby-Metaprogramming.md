@@ -1,10 +1,8 @@
 ---
 layout: post
-title: New Post
-permalink: new-page.html
-description: Some Description
+title: Ruby元编程读书笔记
 date: 2014-02-11 23:08:42 +08:00
-tags: "some tags here"
+tags: Ruby 元编程
 ---
 
 #Ruby元编程读书笔记
