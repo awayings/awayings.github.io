@@ -1,10 +1,3 @@
----
-layout: post
-title: Ruby元编程读书笔记
-date: 2014-02-11 23:08:42 +08:00
-tags: Ruby 元编程
----
-
 #Ruby元编程读书笔记
 一直觉得代码本身才是有有效的文档，本文旨在做一些Ruby特性的展示。Ruby是懒人的Ruby，各种奇技淫巧跟黑科技。
 
@@ -96,3 +89,6 @@ puts C.my_method # =>"a class method"
 
 ##类实例变量 Class Instance Variable
 在一个`Class`的实例变量中存储类级别的状态。
+
+
+> Written with [StackEdit](https://stackedit.io/).
