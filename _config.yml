@@ -1,6 +1,9 @@
-markdown: rdiscount
+markdown: redcarpet
 permalink: /:year/:month/:title/
 url: http://awayings.github.io
+#url: http://192.168.33.15:4000
 author: Jason Zhang
 pygments: true
+redcarpet:
+   extensions: ["fenced_code_blocks", "autolink", "tables", "strikethrough"]
 IMG_PATH: http://freshstu.qiniudn.com

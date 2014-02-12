@@ -21,7 +21,6 @@ p{padding:.5em 0;}
 li{padding:.2em 0;}
 ol,ul{list-style-position:inside;}
 ol ul, ul ol, ul ul, ol ol {margin-left:1em;}
-pre code{margin:1em 0;font-size:13px;line-height:1.6;display:block;overflow:auto;}
 blockquote{display:block;text-align:justify;border-left:4px solid #eeeeee;}
 blockquote{margin:1em 0em;padding-left:1.5em;}
 blockquote p{margin:0;padding:.5em 0;}
@@ -45,7 +44,26 @@ h1{font-family:"Cuprum","Hiragino Sans GB","Microsoft YaHei",sans-serif;font-siz
 h2{font-family:"Cuprum","Hiragino Sans GB","Microsoft YaHei",sans-serif;font-size:1.4em;color:#111;}
 h3{font-family:"Cuprum","Hiragino Sans GB","Microsoft YaHei",sans-serif;font-size:1.2em;color:#222;}
 h4{font-family:"Cuprum","Hiragino Sans GB","Microsoft YaHei",sans-serif;font-size:1em;color:#333;}
-pre,code{font-family:Menlo,"Andale Mono",Consolas,"Courier New",Monaco,monospace;font-size:13px;}
-code{background-color:#bdc5c9;font-color:#80C58C;}
 embed,object,iframe{display:block;margin:4px auto;}
 .gist{font-size: 12px;line-height:1.6;}
+
+/* style zero
+ pre code{margin:1em 0;font-size:13px;line-height:1.6;display:block;overflow:auto;}
+ pre,code{font-family:Menlo,"Andale Mono",Consolas,"Courier New",Monaco,monospace;font-size:13px;}
+code{background-color:#bdc5c9;font-color:#80C58C;}
+*/
+
+/* style A
+code{font-family:Monaco,Menlo,"Courier New",monospace;font-size:.8em;margin:0 2px;padding:2px 5px;border:1px solid #e1e1e8;background-color:#f7f7f9;border-radius:3px;white-space:nowrap}
+pre code{display:block;padding:8px;margin:0 0 30px;line-height:20px;background-color:#f7f7f9;border:1px solid #e1e1e8;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;white-space:pre;overflow:scroll;word-break:break-all}
+*/
+
+/* style B
+ */
+code,pre{font-family:Monaco,Menlo,Consolas,"Courier New",monospace}
+code{padding:2px 4px;font-size:90%;color:#000;background-color:rgba(0,0,0,0.08);white-space:nowrap;border-radius:4px}
+pre{display:block;padding:9.5px;margin:0 0 10px;font-size:13px;line-height:1.428571429;word-break:break-all;word-wrap:break-word;color:#333;background-color:#f8f8f9;border:1px solid #eee;border-radius:4px}
+pre code{padding:0;font-size:inherit;color:inherit;white-space:pre-wrap;background-color:transparent;border:0}
+pre,blockquote{margin:0 0 15px}
+pre{border:0 solid #eee;border-left:10px solid #eee;border-radius:0;border-top-right-radius:5px;border-bottom-right-radius:5px;padding:10px 15px}
+pre code, code{background-color:transparent !important}
