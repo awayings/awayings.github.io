@@ -1,8 +1,9 @@
 ---
 layout: post
-title: Read Notes Ruby Metaprogramming
+title: Notes - Ruby Metaprogramming
 date: 2014-02-12 17:33:49 +08:00
-tags: "Ruby"
+tags: "ruby"
+category: "Programming"
 ---
 
 一直觉得代码本身才是有有效的文档，本文旨在做一些Ruby特性的展示。Ruby是懒人的Ruby，各种奇技淫巧跟黑科技。
