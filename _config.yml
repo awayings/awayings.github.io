@@ -3,5 +3,4 @@ permalink: /:year/:month/:title/
 url: http://awayings.github.io
 author: Jason Zhang
 pygments: true
-
 IMG_PATH: http://freshstu.qiniudn.com
