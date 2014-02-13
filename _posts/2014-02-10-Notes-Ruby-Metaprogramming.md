@@ -2,17 +2,16 @@
 layout: post
 title: Notes - Ruby Metaprogramming
 date: 2014-02-12 17:33:49 +08:00
-tags: "ruby"
+tags: "ruby元编程"
 category: "Programming"
 ---
 
-#2014-02-10-Notes-Ruby-Metaprogramming
 一直觉得代码本身才是有有效的文档，本文旨在做一些Ruby特性的展示。Ruby是懒人的Ruby，各种奇技淫巧跟黑科技。
 
 ##参数数组 Argument Array
 也即不定参数，本质上行是将一组参数压入一个数组中。
 
-```Ruby
+```ruby
 def my_method (*args)
    args.map {|arg| arg.reverse}
 end
@@ -24,7 +23,7 @@ my_method ('abc', 'xyz', '123')  # => ['cba', 'zyx', '321']
 ##环绕别名 Around Alias
 语言层面上支持的一种方法重构技术，其可允许在旧方法前后添加新功能，同时可以使用旧方法的名字来完成新功能的调用。
 
-```Ruby
+```ruby
 class String
    alias :real_length :length
    def length
@@ -42,7 +41,7 @@ end
 ##白板 Blank Slate
 移除一个对象中的所有方法，以便把它们转换成[幽灵方法](#)
 
-```Ruby
+```ruby
 # 从Ruby 1.9开始，增加了一个新的白板类。BasicObject
 class BlankSlate < BasicObject
 end
@@ -69,7 +68,7 @@ obj.to_s       # => "a Ghost Method"
 ##类扩展 Class Extension
 通过向类的eigenclass中引入模块来定义类方法，是[对象扩展]()的一个特例。
 
-```Ruby
+```ruby
 class C; end
 
 module M
@@ -86,7 +85,8 @@ C.my_method # => "a class method"
 
 ##类扩展混入 Class Extension Mixin
 通过实现[钩子]()使一个模块扩展包含者。
-```Ruby
+
+```ruby
 module M
     # The following method will be called when module m is included into anther module/class
     def self.included (base)
