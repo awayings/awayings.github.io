@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Notes - Ruby Metaprogramming 一"
+title: "Ruby元编程阅读笔记"
 date: 2014-02-12 
 tags: "ruby"
 category: "Programming"
