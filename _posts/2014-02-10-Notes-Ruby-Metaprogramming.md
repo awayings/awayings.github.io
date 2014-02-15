@@ -447,7 +447,7 @@ p MyModule::Array.new   # => 'my array'
 ##空指针保护 Nil Guard
 使用‘或’操作符覆写变量
 
-```rubyb
+```ruby
 x = nil
 y = x || "value"
 ```
