@@ -9,7 +9,7 @@ category: "Programming"
 # Rails Cheet Sheet
 本文旨在记录常用的rails相关的命令
 
-### Startup Projects
+## Startup Projects
 ```bash
 # Initialize a proejct
 rails new demo
@@ -19,7 +19,7 @@ rails server        # start web server
 rails destroy  model Oops     # opposite of generate
 ```
 
-### Rails Generate  
+## Rails Generate  
 ```bash
 rails generate controller Say hello goodbye   
 rails g scaffold Product title:string  # generate module/action/view for Product, upper case seems not of usage
@@ -27,7 +27,7 @@ rails g migration add_quantity_to_line_items quantity:integer  # name of the mig
 rails g model payment_type name:string # generate model
 ```
 
-### Debug
+## Debug
 ```bash
 rails console
 rails dbconsole
@@ -40,14 +40,14 @@ prd.save # => false
 prd.errors.full_messages # => view error message
 ```
 
-### Linux shell related
+## Linux shell related
 ```bash
 mysqld --verbose --help # lookup mysql configuration
 sqlite3 -line db/development.md
 
 ```
 
-### Rake - Ruby Make
+## Rake - Ruby Make
 ```bash
 rake -T doc # view document related task
 rake --describe task # get detail description of a task
@@ -62,9 +62,9 @@ rake assets:precompile # compile all assets
 rake doc:app           # generates documentation
 ```
 
-### Action Model
+## Action Model
 
-#### Validation
+### Validation
 ```ruby
 class Product < ActiveRecord::Base
   validates :title, presence: true
@@ -80,13 +80,13 @@ class Product < ActiveRecord::Base
 end
 ```
 
-#### Create Records
+### Create Records
 TBD:
 
-#### Find Records/Where Clauses
+### Find Records/Where Clauses
 TBD:
 
-#### Serialized Object to Database
+### Serialized Object to Database
 ```ruby
 class User < ActiveRecord::Base
 serialize :preferences
@@ -96,7 +96,7 @@ user = User.create(preferences: { "background" => "black", "display" => large })
 User.find(user.id).preferences # => { "background" => "black", "display" => large }
 ```
 
-#### Attribute Query Method
+### Attribute Query Method
 ```ruby
 user = User.new(name: "David")
 user.name? # => true
@@ -105,7 +105,7 @@ anonymous = User.new(name: "")
 anonymous.name? # => false
 ```
 
-#### Apply Migration
+### Apply Migration
 Rails defines a [TableDefinition][1] class to describe the schema. It could be init like below: (p.64)
 
 ```ruby
@@ -116,38 +116,35 @@ end
 ```
 [1]: http://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/TableDefinition.html#method-i-column "Link to Definition"
 
-#### Add Test Data
+### Add Test Data
 Make full use of seeds.rb to add test data. Notice `ActiveRecord::Base#Create` and `ActiveRecord::Base#Create!`  are differenct. The second one will raise an exception if the record is invalid. (p. 69)
 
+## Action View
 
-### Action View
-
-### Basic Helper Functions
+## Basic Helper Functions
 ```html
 <%= link_to "Goodbye", say_goodbye_path %>!
 <%= link_to "Destroy', product, method: :delete, data: { confirm: 'Are you sure?' } %>
 <tr class = "<%= cycle('list_line_odd', 'list_line_even') %>" >
 ```
 
-#### Using link_to method in program
+### Using link_to method in program
 Need more knowledge on url routine (p7x)
 
-#### Modify Unit Test
+### Modify Unit Test
 Not known about `products(:one)` (p. 81)
 
-#### Resize image with image_tag
+### Resize image with image_tag
 we could pass size as option `size: '30x30'`
 
-#### assert_select usage for controller auto testing
-
-#### Cache in ruby
+### Cache in ruby
 Rails 4 supports key based cache which could be referenced [here](http://guides.rubyonrails.org/caching_with_rails.html)   (p.104)
 We have following steps to enable cache in rails
 1. set enable in config
 2. change view (*.erb) for fragments that needs to cache
 3. set storage method for cache
 
-#### Dependency for controller code in rails
+### Dependency for controller code in rails
 The following code could run in rails, so what is in the running environment. How could the ActiveSupport, ActiveRecord and Cart be found? We could also pay attention to the private mark. This would prevent rails to treat the `set_cart` method as controller method.
 
 Answers: 
@@ -166,7 +163,7 @@ private
 end
 ```
 
-#### How to add connection table in rails
+### How to add connection table in rails
 Table LineItem is connection table for product and cart.
 
 ```bash
@@ -187,33 +184,34 @@ class Cart < ActiveRecord::Base
 end
 ```
 
-#### How to choose Get/Post methods
+### How to choose Get/Post methods
 `links_to` method will generate `Http Get` method. `button_to` will generate `POST` method.
 
-#### Parameters of method in ActionPack
+### Parameters of method in ActionPack
 There are always kind of function has the following signature `(name = nil, options = nil, html_options = nil, &block)`. I cann't see there is a need for such parameters.
 
-#### Passing objects between controllers
+### Passing objects between controllers
 `params` is used to pass values between controllers.
 
-#### Error when using session
+### Error when using session
 `cookieOverflow` exception throws when add item to cart. By searching the web, it is because session data is too large to store by cookie.  Change it to use database to store the value. A new gem `activerecord-session_store` is introduced.
 
 Q: I still don't know there is the document for 'cookieOverflow'. Not in the api doc.
 `++` operator is not support in Ruby
 `activerecord#destroy` will trigger callback, however `activerecord#delete` won't.
 
-#### Flash in rails
+### Flash in rails
 Flash is hash-like object, which could pass information to following requests.
 
-#### Test in Rails
+### Test in Rails
 Assertions.
 assert_equal, assert_not_equal
+`assert_select` usage for controller auto testing
 
-#### Ruby js
+### Ruby js
 ruby js may generate code with not exists node, in this time, it will be ignored.
 
-#### Run ruby scripts under rails
+### Run ruby scripts under rails
 ```ruby
 Order.transaction do
   (1..100) do |i|
@@ -226,7 +224,7 @@ end
 rails runner script/load_orders.rb
 ```
 
-#### Rails send email
+### Rails send email
 
 ```bash
 rails generate mailer Notifier order_received order_shipped
@@ -241,17 +239,17 @@ usage
 Notifer.order_received(@order).deliver
 ```
 
-#### Rails integration test
+### Rails integration test
 
 ```bash
 rails g integration_test user_stories
 # create test/integration/user_stories_test.rb
 ```
 
-#### Deploy ruby program on environment
+### Deploy ruby program on environment
 apache used as front-server to process http request, and passenger will dispatch ruby reqest to rails processes.
 
-#### CRUD With ActiveRecord
+### CRUD With ActiveRecord
 
 ```ruby
 name = params[:name]
@@ -278,7 +276,7 @@ User.where("name like ?", params[:name]+"%")
 
 ```
 
-#### Subsetting the Records found
+### Subsetting the Records found
 ```ruby
 # The view wants to display orders grouped into pages,
 # where each page shows page_size orders at a time.
@@ -293,7 +291,7 @@ order("pay_type, shipped_at DESC").
 limit(10)
 ```
 
-#### Lock of Active Record
+### Lock of Active Record
 ```ruby
 Account.transaction do
   ac = Account.where(id: id).lock("LOCK IN SHARE MODE").first
@@ -302,7 +300,7 @@ Account.transaction do
 end
 ```
 
- #### Statics of Result
+ ### Statics of Result
 ```ruby
 average = Order.average(:amount) # average amount of orders
 max = Order.maximum(:amount)
@@ -311,7 +309,7 @@ total = Order.sum(:amount)
 number = Order.count
 ```
 
-#### Scopes : to reuse simple data.
+### Scopes : to reuse simple data.
 ```ruby
 class Order < ActiveRecord::Base
   scope :last_n_days, lambda { |days| where('updated < ?' , days) }
@@ -322,7 +320,7 @@ orders = Order.last_n_days(7)
 orders = Order.checks.last_n_days(7)
 ```
 
-#### Update on ActiveRecord
+### Update on ActiveRecord
 ```ruby
 # fetch and update record, id is used as first parameter
 order = Order.update(12, name: "Barney", email: "barney@bedrock.com")
@@ -331,7 +329,7 @@ order = Order.update(12, name: "Barney", email: "barney@bedrock.com")
 result = Product.update_all("price = 1.1*price", "title like '%Java%'")
 ```
 
-#### Delete Rows
+### Delete Rows
 ```ruby
 # delete method bypass the validation and ActiveRecord callback
 Order.delete(123)
@@ -341,7 +339,7 @@ User.delete([2,3,4,5])
 Product.delete_all(["price > ?", @expensive_price])
 ```
 
-#### Active Record Callback
+### Active Record Callback
 ```ruby
 class Order < ActiveRecord::Base
   before_validation :normalize_credit_card_number
@@ -357,7 +355,7 @@ class Order < ActiveRecord::Base
 end
 ```
 
-#### Action Pack
+### Action Pack
 
 Action Dispatch helps to find controller and method for processing request. There are two ways to defined the routes, pre-defined and self-defined.
 
@@ -393,10 +391,10 @@ We could fire a request on client by ruby methods
 
 Rails uses one controller method to handle all types of output(xml/json/html). This may increase difficulty for error handling.
 
-#### Process request in controller
+### Process request in controller
 TBD
 
-#### Q&A
+### Q&A
 
 * Where to find the document for phantom method, since they are created dynamically? e.g. _find*_
 * Rails method has return type, however it is hard to find them.
