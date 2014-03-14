@@ -9,6 +9,7 @@ category: "Programming"
 本文旨在记录常用的rails相关的命令
 
 ## Startup Projects
+
 ```bash
 # Initialize a proejct
 rails new demo
@@ -19,6 +20,7 @@ rails destroy  model Oops     # opposite of generate
 ```
 
 ## Rails Generate  
+
 ```bash
 rails generate controller Say hello goodbye   
 rails g scaffold Product title:string  # generate module/action/view for Product, upper case seems not of usage
