@@ -6,7 +6,6 @@ tags: "rails"
 category: "Programming"
 ---
 
-# Rails Cheet Sheet
 本文旨在记录常用的rails相关的命令
 
 ## Startup Projects
