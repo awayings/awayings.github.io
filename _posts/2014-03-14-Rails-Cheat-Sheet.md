@@ -9,23 +9,23 @@ category: "Programming"
 本文旨在记录常用的rails相关的命令
 
 ## Startup Projects
-
+初始化项目以及基本使用。
 ```bash
 # Initialize a proejct
 rails new demo
 cd demo
 rake about          # try to see if everything is OK
 rails server        # start web server
-rails destroy  model Oops     # opposite of generate
 ```
 
 ## Rails Generate  
-
+代码生成。
 ```bash
 rails generate controller Say hello goodbye   
 rails g scaffold Product title:string  # generate module/action/view for Product, upper case seems not of usage
 rails g migration add_quantity_to_line_items quantity:integer  # name of the migration will help rails to guess what's your meanning
 rails g model payment_type name:string # generate model
+rails destroy  model Oops     # opposite of generate
 ```
 
 ## Debug
@@ -41,11 +41,10 @@ prd.save # => false
 prd.errors.full_messages # => view error message
 ```
 
-## Linux shell related
+## Database Console
 ```bash
 mysqld --verbose --help # lookup mysql configuration
 sqlite3 -line db/development.md
-
 ```
 
 ## Rake - Ruby Make
