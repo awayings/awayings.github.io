@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Rails Cheet Sheet"
-date: 2014-02-12
+date: 2014-03-14
 tags: "rails"
 category: "Programming"
 ---
