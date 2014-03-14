@@ -19,7 +19,7 @@ rails server        # start web server
 ```
 
 ## Rails Generate  
-代码生成。
+代码生成
 ```bash
 rails generate controller Say hello goodbye   
 rails g scaffold Product title:string  # generate module/action/view for Product, upper case seems not of usage
