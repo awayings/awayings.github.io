@@ -8,8 +8,19 @@ category: "Programming"
 
 本文旨在记录常用的rails相关的命令
 
-## Startup Projects
+## Concepts
+
+
+Model Layer: 这一层由业务模型类组成。在Rails中有两种类型。1. 是继承自`ActiveRecord::Base`。2. 实现了`ActiveModel`中相应接口的普通ruby类。
+
+Controller Layer: 这一层主要用来处理http请求。在Rails中由`ActionDispatch`和`ActionController`组成。
+
+View Layer: `ActionView`通过模板生成各种资源。
+
+
+## Basic Startup
 初始化项目以及基本使用。
+
 ```bash
 # Initialize a proejct
 rails new demo
@@ -64,6 +75,194 @@ rake doc:app           # generates documentation
 
 ## Action Model
 
+### Attribute Magic
+```ruby
+class Person
+  include ActiveModel::AttributeMethods
+
+  attribute_method_prefix 'clear_'
+  define_attribute_methods :name, :age
+
+  attr_accessor :name, :age
+
+  def clear_attribute(attr)
+    send("#{attr}=", nil)
+  end
+end
+
+person = Person.new
+person.clear_name
+person.clear_age
+```
+
+### Callbacks
+```ruby
+class Person
+  extend ActiveModel::Callbacks
+  define_model_callbacks :create
+
+  def create
+    run_callbacks :create do
+      # Your create action methods here
+    end
+  end
+end
+```
+
+### Tracking value changes
+```ruby
+class Person
+  include ActiveModel::Dirty
+
+  define_attribute_methods :name
+
+  def name
+    @name
+  end
+
+  def name=(val)
+    name_will_change! unless val == @name
+    @name = val
+  end
+
+  def save
+    # do persistence work
+    changes_applied
+  end
+end
+
+person = Person.new
+person.name             # => nil
+person.changed?         # => false
+person.name = 'bob'
+person.changed?         # => true
+person.changed          # => ['name']
+person.changes          # => { 'name' => [nil, 'bob'] }
+person.save
+person.name = 'robert'
+person.save
+person.previous_changes # => {'name' => ['bob, 'robert']}
+```
+
+### Adding `errors` inteface to objects
+```ruby
+class Person
+
+  def initialize
+    @errors = ActiveModel::Errors.new(self)
+  end
+
+  attr_accessor :name
+  attr_reader   :errors
+
+  def validate!
+    errors.add(:name, "cannot be nil") if name.nil?
+  end
+
+  def self.human_attribute_name(attr, options = {})
+    "Name"
+  end
+end
+
+person = Person.new
+person.name = nil
+person.validate!
+person.errors.full_messages
+# => ["Name cannot be nil"]
+
+```
+
+### Model name introspection
+```ruby
+class NamedPerson
+  extend ActiveModel::Naming
+end
+
+NamedPerson.model_name        # => "NamedPerson"
+NamedPerson.model_name.human  # => "Named person"
+```
+
+### making objects serializable
+```ruby
+class SerialPerson
+  include ActiveModel::Serialization
+
+  attr_accessor :name
+
+  def attributes
+    {'name' => name}
+  end
+end
+
+s = SerialPerson.new
+s.serializable_hash   # => {"name"=>nil}
+
+class SerialPerson
+  include ActiveModel::Serializers::JSON
+end
+
+s = SerialPerson.new
+s.to_json             # => "{\"name\":null}"
+
+class SerialPerson
+  include ActiveModel::Serializers::Xml
+end
+
+s = SerialPerson.new
+s.to_xml              # => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<serial-person...
+```
+
+### I18n support
+```ruby
+class Person
+  extend ActiveModel::Translation
+end
+
+Person.human_attribute_name('my_attribute')
+# => "My attribute"
+```
+
+### Validation
+```ruby
+class Person
+  include ActiveModel::Validations
+
+  attr_accessor :first_name, :last_name
+
+  validates_each :first_name, :last_name do |record, attr, value|
+    record.errors.add attr, 'starts with z.' if value.to_s[0] == ?z
+  end
+end
+
+person = Person.new
+person.first_name = 'zoolander'
+person.valid?  # => false
+```
+
+### Custom Validators
+```ruby
+class HasNameValidator < ActiveModel::Validator
+  def validate(record)
+    record.errors[:name] = "must exist" if record.name.blank?
+  end
+end
+
+class ValidatorPerson
+  include ActiveModel::Validations
+  validates_with HasNameValidator
+  attr_accessor :name
+end
+
+p = ValidatorPerson.new
+p.valid?                  # =>  false
+p.errors.full_messages    # => ["Name must exist"]
+p.name = "Bob"
+p.valid?                  # =>  true
+```
+
+
+## ActionRecord
+
 ### Validation
 ```ruby
 class Product < ActiveRecord::Base
@@ -77,6 +276,34 @@ class Product < ActiveRecord::Base
   validates :age, numericality: true
   validates :username, presence: true
   validates :username, uniqueness: true
+end
+```
+
+### Associations
+```ruby
+class Firm < ActiveRecord::Base
+  has_many   :clients
+  has_one    :account
+  belongs_to :conglomerate
+end
+```
+
+### Aggregations of value objects
+```ruby
+class Account < ActiveRecord::Base
+  composed_of :balance, class_name: 'Money',
+              mapping: %w(balance amount)
+  composed_of :address,
+              mapping: [%w(address_street street), %w(address_city city)]
+end
+```
+
+### Transactions
+```ruby
+# Database transaction
+Account.transaction do
+  david.withdrawal(100)
+  mary.deposit(100)
 end
 ```
 
