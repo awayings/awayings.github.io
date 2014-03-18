@@ -149,7 +149,7 @@ person.save
 person.previous_changes # => {'name' => ['bob, 'robert']}
 ```
 
-### Adding `errors` inteface to objects
+### Adding Errors Inteface to Objects
 
 ```ruby
 class Person
@@ -301,117 +301,6 @@ class Firm < ActiveRecord::Base
 end
 ```
 
-### Aggregations of value objects
-
-```ruby
-class Account < ActiveRecord::Base
-  composed_of :balance, class_name: 'Money',
-              mapping: %w(balance amount)
-  composed_of :address,
-              mapping: [%w(address_street street), %w(address_city city)]
-end
-```
-
-### Transactions
-
-```ruby
-# Database transaction
-Account.transaction do
-  david.withdrawal(100)
-  mary.deposit(100)
-end
-```
-
-### Create Records
-TBD:
-
-### Find Records/Where Clauses
-TBD:
-
-### Serialized Object to Database
-
-```ruby
-class User < ActiveRecord::Base
-serialize :preferences
-end
-
-user = User.create(preferences: { "background" => "black", "display" => large })
-User.find(user.id).preferences # => { "background" => "black", "display" => large }
-```
-
-### Attribute Query Method
-
-```ruby
-user = User.new(name: "David")
-user.name? # => true
-
-anonymous = User.new(name: "")
-anonymous.name? # => false
-```
-
-### Apply Migration
-Rails defines a [TableDefinition][1] class to describe the schema. It could be init like below: (p.64)
-
-```ruby
-create_table :product do |t|
-  t.text :title, limit: 50,
-  t.decimal :price, precision:8, scale:2
-end
-```
-
-[1]: http://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/TableDefinition.html#method-i-column "Link to Definition"
-
-### Add Test Data
-Make full use of seeds.rb to add test data. Notice `ActiveRecord::Base#Create` and `ActiveRecord::Base#Create!`  are differenct. The second one will raise an exception if the record is invalid. (p. 69)
-
-## Action View
-
-## Basic Helper Functions
-
-```html
-<%= link_to "Goodbye", say_goodbye_path %>!
-<%= link_to "Destroy', product, method: :delete, data: { confirm: 'Are you sure?' } %>
-<tr class = "<%= cycle('list_line_odd', 'list_line_even') %>" >
-```
-
-### Using link_to method in program
-
-Need more knowledge on url routine (p7x)
-
-### Modify Unit Test
-
-Not known about `products(:one)` (p. 81)
-
-### Resize image with image_tag
-
-we could pass size as option `size: '30x30'`
-
-### Cache in ruby
-Rails 4 supports key based cache which could be referenced [here](http://guides.rubyonrails.org/caching_with_rails.html)   (p.104)
-We have following steps to enable cache in rails
-1. set enable in config
-2. change view (*.erb) for fragments that needs to cache
-3. set storage method for cache
-
-### Dependency for controller code in rails
-The following code could run in rails, so what is in the running environment. How could the ActiveSupport, ActiveRecord and Cart be found? We could also pay attention to the private mark. This would prevent rails to treat the `set_cart` method as controller method.
-
-Answers: 
-1. modules in `app/controllers/concern/` could be accessed in all controllers
-
-```ruby
-module CurrentCart
-extend ActiveSupport::Concern
-private
-  def set_cart
-    @cart = Cart.find(session[:cart_id])
-    rescue ActiveRecord::RecordNotFound
-    @cart = Cart.create
-    session[:cart_id] = @cart
-  end
-end
-```
-
 ### How to add connection table in rails
 Table LineItem is connection table for product and cart.
 
@@ -433,73 +322,83 @@ class Cart < ActiveRecord::Base
 end
 ```
 
-### How to choose Get/Post methods
-`links_to` method will generate `Http Get` method. `button_to` will generate `POST` method.
-
-### Parameters of method in ActionPack
-There are always kind of function has the following signature `(name = nil, options = nil, html_options = nil, &block)`. I cann't see there is a need for such parameters.
-
-### Passing objects between controllers
-`params` is used to pass values between controllers.
-
-### Error when using session
-`cookieOverflow` exception throws when add item to cart. By searching the web, it is because session data is too large to store by cookie.  Change it to use database to store the value. A new gem `activerecord-session_store` is introduced.
-
-Q: I still don't know there is the document for 'cookieOverflow'. Not in the api doc.
-`++` operator is not support in Ruby
-`activerecord#destroy` will trigger callback, however `activerecord#delete` won't.
-
-### Flash in rails
-Flash is hash-like object, which could pass information to following requests.
-
-### Test in Rails
-Assertions.
-assert_equal, assert_not_equal
-`assert_select` usage for controller auto testing
-
-### Ruby js
-ruby js may generate code with not exists node, in this time, it will be ignored.
-
-### Run ruby scripts under rails
+### Aggregations of value objects
+值对象的关联。
 
 ```ruby
-Order.transaction do
-  (1..100) do |i|
-    Order.create (...) 
-  end
+class Account < ActiveRecord::Base
+  composed_of :balance, class_name: 'Money',
+              mapping: %w(balance amount)
+  composed_of :address,
+              mapping: [%w(address_street street), %w(address_city city)]
 end
 ```
 
-```bash
-rails runner script/load_orders.rb
-```
+### Transactions
 
-### Rails send email
-
-```bash
-rails generate mailer Notifier order_received order_shipped
-# create app/mailers/notifier.rb
-# create ap/views/notifier/order_received.text.erb
-# create ap/views/notifier/order_shipped.text.erb
-# create test/functional/notifier_test.rb
-```
-
-usage
 ```ruby
-Notifer.order_received(@order).deliver
+# Database transaction
+Account.transaction do
+  david.withdrawal(100)
+  mary.deposit(100)
+end
 ```
 
-### Rails integration test
+### Create Records
 
-```bash
-rails g integration_test user_stories
-# create test/integration/user_stories_test.rb
+```ruby
+an_order = Order.new
+an_order.name = "Dave Thomas"
+an_order.save
+
+Order.new do |do|
+  o.name = "Dave"
+  o.save
+end
+
+anOrder = Order.new(
+  name: "Mike")
+anOrder.save
+
+anOrder = Order.create(name: "Jason", email: "x@qad.com")
 ```
 
-### Deploy ruby program on environment
-apache used as front-server to process http request, and passenger will dispatch ruby reqest to rails processes.
+### Attribute Query Method
 
-### CRUD With ActiveRecord
+```ruby
+user = User.new(name: "David")
+user.name? # => true
+
+anonymous = User.new(name: "")
+anonymous.name? # => false
+```
+
+### Find Records/Where Clauses
+使用Where Clause，find_by等函数，保持查找函数的统一性。
+
+```ruby
+Book.where(author: 'Albert Yu')
+
+Book.find_all_by_title('Rails 4') # r3 way
+Book.find_last_by_author('Albert Yu') # r3 way
+
+Book.where(title: 'Rails 4') # r4 way
+Book.where(author: 'Albert Yu').last # r4 way
+
+Book.find_by_title('Rails 4') # 接收单个参数的用法在 r3 & r4 都可以
+Book.find_by(title: 'Rails4') # 不过 r4 更偏爱这样写
+
+Book.find_by_title('Rails 4', conditions: { author: 'Albert Yu' }) # 这就不好了，得改
+Book.find_by(title: 'Rails4', author: 'Albert Yu') # Wow! 太棒了！
+
+# 容易使人迷惑的用法
+Book.where(title: 'Rails 4').first_or_create
+# 若找不到…
+Book.where(title: 'Rails 4').create
+
+```
+
+Where Clause的详细用法
 
 ```ruby
 name = params[:name]
@@ -585,6 +484,7 @@ result = Product.update_all("price = 1.1*price", "title like '%Java%'")
 ```
 
 ### Delete Rows
+
 ```ruby
 # delete method bypass the validation and ActiveRecord callback
 Order.delete(123)
@@ -610,6 +510,142 @@ class Order < ActiveRecord::Base
   end
 end
 ```
+
+### Serialized Object to Database
+
+```ruby
+class User < ActiveRecord::Base
+serialize :preferences
+end
+
+user = User.create(preferences: { "background" => "black", "display" => large })
+User.find(user.id).preferences # => { "background" => "black", "display" => large }
+```
+
+### Apply Migration
+Rails defines a [TableDefinition][1] class to describe the schema. It could be init like below: (p.64)
+
+```ruby
+create_table :product do |t|
+  t.text :title, limit: 50,
+  t.decimal :price, precision:8, scale:2
+end
+```
+
+[1]: http://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/TableDefinition.html#method-i-column "Link to Definition"
+
+### Add Test Data
+Make full use of seeds.rb to add test data. Notice `ActiveRecord::Base#Create` and `ActiveRecord::Base#Create!`  are differenct. The second one will raise an exception if the record is invalid. (p. 69)
+
+## Action View
+
+### Basic Helper Functions
+
+```html
+<%= link_to "Goodbye", say_goodbye_path %>!
+<%= link_to "Destroy', product, method: :delete, data: { confirm: 'Are you sure?' } %>
+<tr class = "<%= cycle('list_line_odd', 'list_line_even') %>" >
+```
+
+### Using link_to method in program
+Need more knowledge on url routine (p7x)
+
+### Modify Unit Test
+Not known about `products(:one)` (p. 81)
+
+### Resize image with image_tag
+we could pass size as option `size: '30x30'`
+
+### Cache in ruby
+Rails 4 supports key based cache which could be referenced [here](http://guides.rubyonrails.org/caching_with_rails.html)   (p.104)
+We have following steps to enable cache in rails
+1. set enable in config
+2. change view (*.erb) for fragments that needs to cache
+3. set storage method for cache
+
+### Dependency for controller code in rails
+The following code could run in rails, so what is in the running environment. How could the ActiveSupport, ActiveRecord and Cart be found? We could also pay attention to the private mark. This would prevent rails to treat the `set_cart` method as controller method.
+
+Answers: 
+1. modules in `app/controllers/concern/` could be accessed in all controllers
+
+```ruby
+module CurrentCart
+extend ActiveSupport::Concern
+private
+  def set_cart
+    @cart = Cart.find(session[:cart_id])
+    rescue ActiveRecord::RecordNotFound
+    @cart = Cart.create
+    session[:cart_id] = @cart
+  end
+end
+```
+
+### How to choose Get/Post methods
+`links_to` method will generate `Http Get` method. `button_to` will generate `POST` method.
+
+### Parameters of method in ActionPack
+There are always kind of function has the following signature `(name = nil, options = nil, html_options = nil, &block)`. I cann't see there is a need for such parameters.
+
+### Passing objects between controllers
+`params` is used to pass values between controllers.
+
+### Error when using session
+`cookieOverflow` exception throws when add item to cart. By searching the web, it is because session data is too large to store by cookie.  Change it to use database to store the value. A new gem `activerecord-session_store` is introduced.
+
+Q: I still don't know there is the document for 'cookieOverflow'. Not in the api doc.
+`++` operator is not support in Ruby
+`activerecord#destroy` will trigger callback, however `activerecord#delete` won't.
+
+### Flash in rails
+Flash is hash-like object, which could pass information to following requests.
+
+### Test in Rails
+assert_equal, assert_not_equal, `assert_select` usage for controller auto testing
+
+### Ruby js
+ruby js may generate code with not exists node, in this time, it will be ignored.
+
+### Run ruby scripts under rails
+
+```ruby
+Order.transaction do
+  (1..100) do |i|
+    Order.create (...) 
+  end
+end
+```
+
+```bash
+rails runner script/load_orders.rb
+```
+
+### Rails send email
+
+```bash
+rails generate mailer Notifier order_received order_shipped
+# create app/mailers/notifier.rb
+# create ap/views/notifier/order_received.text.erb
+# create ap/views/notifier/order_shipped.text.erb
+# create test/functional/notifier_test.rb
+```
+
+```ruby
+Notifer.order_received(@order).deliver
+```
+
+### Rails integration test
+
+```bash
+rails g integration_test user_stories
+# create test/integration/user_stories_test.rb
+```
+
+### Deploy ruby program on environment
+apache used as front-server to process http request, and passenger will dispatch ruby reqest to rails processes.
+
+### CRUD With ActiveRecord
 
 ### Action Pack
 
@@ -646,9 +682,6 @@ We could fire a request on client by ruby methods
 ```
 
 Rails uses one controller method to handle all types of output(xml/json/html). This may increase difficulty for error handling.
-
-### Process request in controller
-TBD
 
 ### Q&A
 
