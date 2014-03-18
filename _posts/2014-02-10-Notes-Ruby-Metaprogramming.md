@@ -1,9 +1,10 @@
 ---
 layout: post
-title: "Ruby元编程阅读笔记"
+title: Ruby元编程阅读笔记
 date: 2014-02-12
-tags: "ruby元编程"
-category: "Programming"
+tags: ruby元编程
+category: Programming
+notebook: 工作日志
 ---
 
 一直觉得代码本身才是有有效的文档，本文旨在做一些Ruby特性的展示。Ruby是懒人的Ruby，各种奇技淫巧跟黑科技。

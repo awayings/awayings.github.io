@@ -1,22 +1,20 @@
 ---
 layout: post
-title: "Rails Cheet Sheet"
+title: Rails Cheet Sheet
 date: 2014-03-14
-tags: "rails"
-category: "Programming"
+tags: rails
+category: Programming
+notebook: 工作日志
 ---
 
 本文旨在记录常用的rails相关的命令
 
 ## Concepts
-
-
 Model Layer: 这一层由业务模型类组成。在Rails中有两种类型。1. 是继承自`ActiveRecord::Base`。2. 实现了`ActiveModel`中相应接口的普通ruby类。
 
 Controller Layer: 这一层主要用来处理http请求。在Rails中由`ActionDispatch`和`ActionController`组成。
 
 View Layer: `ActionView`通过模板生成各种资源。
-
 
 ## Basic Startup
 初始化项目以及基本使用。
@@ -31,6 +29,7 @@ rails server        # start web server
 
 ## Rails Generate  
 代码生成
+
 ```bash
 rails generate controller Say hello goodbye   
 rails g scaffold Product title:string  # generate module/action/view for Product, upper case seems not of usage
@@ -40,6 +39,7 @@ rails destroy  model Oops     # opposite of generate
 ```
 
 ## Debug
+
 ```bash
 rails console
 rails dbconsole
@@ -53,12 +53,14 @@ prd.errors.full_messages # => view error message
 ```
 
 ## Database Console
+
 ```bash
 mysqld --verbose --help # lookup mysql configuration
 sqlite3 -line db/development.md
 ```
 
 ## Rake - Ruby Make
+
 ```bash
 rake -T doc # view document related task
 rake --describe task # get detail description of a task
@@ -76,6 +78,7 @@ rake doc:app           # generates documentation
 ## Action Model
 
 ### Attribute Magic
+
 ```ruby
 class Person
   include ActiveModel::AttributeMethods
@@ -96,6 +99,7 @@ person.clear_age
 ```
 
 ### Callbacks
+
 ```ruby
 class Person
   extend ActiveModel::Callbacks
@@ -110,6 +114,7 @@ end
 ```
 
 ### Tracking value changes
+
 ```ruby
 class Person
   include ActiveModel::Dirty
@@ -145,6 +150,7 @@ person.previous_changes # => {'name' => ['bob, 'robert']}
 ```
 
 ### Adding `errors` inteface to objects
+
 ```ruby
 class Person
 
@@ -173,6 +179,7 @@ person.errors.full_messages
 ```
 
 ### Model name introspection
+
 ```ruby
 class NamedPerson
   extend ActiveModel::Naming
@@ -183,6 +190,7 @@ NamedPerson.model_name.human  # => "Named person"
 ```
 
 ### making objects serializable
+
 ```ruby
 class SerialPerson
   include ActiveModel::Serialization
@@ -209,10 +217,11 @@ class SerialPerson
 end
 
 s = SerialPerson.new
-s.to_xml              # => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<serial-person...
+s.to_xml              # => 
 ```
 
 ### I18n support
+
 ```ruby
 class Person
   extend ActiveModel::Translation
@@ -223,6 +232,7 @@ Person.human_attribute_name('my_attribute')
 ```
 
 ### Validation
+
 ```ruby
 class Person
   include ActiveModel::Validations
@@ -240,6 +250,7 @@ person.valid?  # => false
 ```
 
 ### Custom Validators
+
 ```ruby
 class HasNameValidator < ActiveModel::Validator
   def validate(record)
@@ -264,6 +275,7 @@ p.valid?                  # =>  true
 ## ActionRecord
 
 ### Validation
+
 ```ruby
 class Product < ActiveRecord::Base
   validates :title, presence: true
@@ -280,6 +292,7 @@ end
 ```
 
 ### Associations
+
 ```ruby
 class Firm < ActiveRecord::Base
   has_many   :clients
@@ -289,6 +302,7 @@ end
 ```
 
 ### Aggregations of value objects
+
 ```ruby
 class Account < ActiveRecord::Base
   composed_of :balance, class_name: 'Money',
@@ -299,6 +313,7 @@ end
 ```
 
 ### Transactions
+
 ```ruby
 # Database transaction
 Account.transaction do
@@ -314,6 +329,7 @@ TBD:
 TBD:
 
 ### Serialized Object to Database
+
 ```ruby
 class User < ActiveRecord::Base
 serialize :preferences
@@ -324,6 +340,7 @@ User.find(user.id).preferences # => { "background" => "black", "display" => larg
 ```
 
 ### Attribute Query Method
+
 ```ruby
 user = User.new(name: "David")
 user.name? # => true
@@ -341,6 +358,7 @@ create_table :product do |t|
   t.decimal :price, precision:8, scale:2
 end
 ```
+
 [1]: http://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/TableDefinition.html#method-i-column "Link to Definition"
 
 ### Add Test Data
@@ -349,6 +367,7 @@ Make full use of seeds.rb to add test data. Notice `ActiveRecord::Base#Create` a
 ## Action View
 
 ## Basic Helper Functions
+
 ```html
 <%= link_to "Goodbye", say_goodbye_path %>!
 <%= link_to "Destroy', product, method: :delete, data: { confirm: 'Are you sure?' } %>
@@ -356,12 +375,15 @@ Make full use of seeds.rb to add test data. Notice `ActiveRecord::Base#Create` a
 ```
 
 ### Using link_to method in program
+
 Need more knowledge on url routine (p7x)
 
 ### Modify Unit Test
+
 Not known about `products(:one)` (p. 81)
 
 ### Resize image with image_tag
+
 we could pass size as option `size: '30x30'`
 
 ### Cache in ruby
@@ -439,6 +461,7 @@ assert_equal, assert_not_equal
 ruby js may generate code with not exists node, in this time, it will be ignored.
 
 ### Run ruby scripts under rails
+
 ```ruby
 Order.transaction do
   (1..100) do |i|
@@ -504,6 +527,7 @@ User.where("name like ?", params[:name]+"%")
 ```
 
 ### Subsetting the Records found
+
 ```ruby
 # The view wants to display orders grouped into pages,
 # where each page shows page_size orders at a time.
@@ -519,6 +543,7 @@ limit(10)
 ```
 
 ### Lock of Active Record
+
 ```ruby
 Account.transaction do
   ac = Account.where(id: id).lock("LOCK IN SHARE MODE").first
@@ -527,7 +552,8 @@ Account.transaction do
 end
 ```
 
- ### Statics of Result
+### Statics of Result
+
 ```ruby
 average = Order.average(:amount) # average amount of orders
 max = Order.maximum(:amount)
@@ -537,6 +563,7 @@ number = Order.count
 ```
 
 ### Scopes : to reuse simple data.
+
 ```ruby
 class Order < ActiveRecord::Base
   scope :last_n_days, lambda { |days| where('updated < ?' , days) }
@@ -548,6 +575,7 @@ orders = Order.checks.last_n_days(7)
 ```
 
 ### Update on ActiveRecord
+
 ```ruby
 # fetch and update record, id is used as first parameter
 order = Order.update(12, name: "Barney", email: "barney@bedrock.com")
@@ -567,6 +595,7 @@ Product.delete_all(["price > ?", @expensive_price])
 ```
 
 ### Active Record Callback
+
 ```ruby
 class Order < ActiveRecord::Base
   before_validation :normalize_credit_card_number
